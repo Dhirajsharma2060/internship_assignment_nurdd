@@ -3,6 +3,8 @@ import dotenv from "dotenv";
 import cors from "cors";
 import websiteRoutes from "./routes/routes.js";
 import prisma from "./models/db.js";
+import swaggerUi from "swagger-ui-express";
+import swaggerSpec from "./config/swagger.js";
 
 dotenv.config();
 
@@ -14,6 +16,7 @@ app.use(express.json());
 
 // Routes
 app.use("/api/websites", websiteRoutes);
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Health check
 app.get("/", (req, res) => {

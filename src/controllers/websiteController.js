@@ -8,11 +8,22 @@ export const analyzeWebsite = async (req, res) => {
     if (!url) {
       return res.status(400).json({ error: "URL is required" });
     }
+    // Validate URL format
+    try {
+      new URL(url);
+    } catch {
+      return res.status(400).json({ error: "Invalid URL format" });
+    }
+
+    if (url.length > 2048) {
+      return res.status(400).json({ error: "URL is too long" });
+    }
 
     // Scrape brand + description
     const { brandName, description } = await scrapeWebsite(url);
 
     // Save to DB
+    // INSERT operation in DB
     const website = await prisma.website.create({
       data: { url, brandName, description },
     });
@@ -27,10 +38,29 @@ export const analyzeWebsite = async (req, res) => {
 // GET /api/websites
 export const getWebsites = async (req, res) => {
   try {
-    const websites = await prisma.website.findMany({
-      orderBy: { createdAt: "desc" },
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    // SELECT operation with limit 
+    const [websites, total] = await Promise.all([
+      prisma.website.findMany({
+        orderBy: { createdAt: "desc" },
+        skip,
+        take: limit,
+      }),
+      // SELECT COUNT(*)
+      prisma.website.count(),
+    ]);
+
+    res.json({
+      data: websites,
+      page,
+      limit,
+      // using the count 
+      total,
+      totalPages: Math.ceil(total / limit),
     });
-    res.json(websites);
   } catch (error) {
     console.error("Get websites error:", error);
     res.status(500).json({ error: "Something went wrong. Please try again later." });

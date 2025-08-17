@@ -3,14 +3,18 @@ import * as cheerio from "cheerio";
 
 const scrapeWebsite = async (url) => {
   try {
-    // Fetch page HTML
-    const { data: html } = await axios.get(url, {
+    const encodedUrl = encodeURI(url);
+    const response = await axios.get(encodedUrl, {
       headers: { "User-Agent": "Mozilla/5.0" }, // mimic browser
       timeout: 10000, // 10s timeout
     });
 
+    if (!response.headers["content-type"].includes("text/html")) {
+      throw new Error("Not an HTML page");
+    }
+
     // Load into Cheerio
-    const $ = cheerio.load(html);
+    const $ = cheerio.load(response.data);
 
     // Extract brand name
     let brandName =
