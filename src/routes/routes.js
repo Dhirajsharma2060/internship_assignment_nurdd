@@ -1,4 +1,5 @@
 import express from "express";
+import rateLimit from "express-rate-limit";
 import {
   analyzeWebsite,
   getWebsites,
@@ -7,6 +8,7 @@ import {
 } from "../controllers/websiteController.js";
 
 const router = express.Router();
+
 
 /**
  * @swagger
@@ -65,7 +67,7 @@ const router = express.Router();
  *                   type: string
  *                   example: "Something went wrong. Please try again later."
  */
-router.post("/analyze", analyzeWebsite);
+router.post("/analyze",analyzeWebsite);
 
 /**
  * @swagger
