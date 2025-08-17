@@ -28,6 +28,18 @@ app.get("/", (req, res) => {
   res.json({ message: "API is running " });
 });
 
+// Health check with database connectivity
+app.get("/healthz", async (req, res) => {
+  try {
+    await prisma.$queryRaw`SELECT 1`;
+    console.log(`[HEALTHZ] ${new Date().toISOString()} - OK`);
+    res.json({ status: "ok", db: "up" });
+  } catch (err) {
+    console.error(`[HEALTHZ] ${new Date().toISOString()} - DB DOWN:`, err.message);
+    res.status(500).json({ status: "error", db: "down" });
+  }
+});
+
 const PORT = process.env.PORT || 5000;
 
 // Async server start for future extensibility
