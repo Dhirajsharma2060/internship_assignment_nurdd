@@ -6,6 +6,7 @@ import websiteRoutes from "./routes/routes.js";
 import prisma from "./models/db.js";
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./config/swagger.js";
+import docsLimiter from "./routes/routes.js"
 
 dotenv.config();
 
@@ -14,21 +15,13 @@ const app = express();
 // Trust proxy headers (important for correct IP detection behind proxies like Render, Heroku, etc.)
 app.set('trust proxy', true);
 
-// Global rate limiter (e.g., 100 requests per 15 minutes per IP)
-const globalLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
-  message: { error: "Too many requests, please try again later." },
-});
-
-app.use(globalLimiter);
 
 app.use(cors());
 app.use(express.json());
 
 // Routes
 app.use("/api/websites", websiteRoutes);
-app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use("/docs", docsLimiter,swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Health check
 app.get("/", (req, res) => {

@@ -8,7 +8,17 @@ import {
 } from "../controllers/websiteController.js";
 
 const router = express.Router();
+const analyzeLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 10,
+  message: { error: "Too many analyze requests, please try again later." },
+});
 
+const docsLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 1000,
+  message: { error: "Too many docs requests, please try again later." },
+});
 
 /**
  * @swagger
@@ -67,7 +77,7 @@ const router = express.Router();
  *                   type: string
  *                   example: "Something went wrong. Please try again later."
  */
-router.post("/analyze",analyzeWebsite);
+router.post("/analyze",analyzeLimiter,analyzeWebsite);
 
 /**
  * @swagger
