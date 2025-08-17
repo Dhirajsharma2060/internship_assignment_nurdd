@@ -1,4 +1,14 @@
 import swaggerJSDoc from "swagger-jsdoc";
+import dotenv from "dotenv";
+const dotenvResult = dotenv.config();
+
+if (dotenvResult.error) {
+  console.error("dotenv failed to load:", dotenvResult.error);
+} else {
+  console.log("dotenv loaded successfully");
+}
+
+const serverUrl = process.env.API_BASE_URL || "http://localhost:5000";
 
 const options = {
   definition: {
@@ -10,7 +20,7 @@ const options = {
     },
     servers: [
       {
-        url: "http://localhost:5000",
+        url: serverUrl,
       },
     ],
   },

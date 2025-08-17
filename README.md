@@ -49,12 +49,12 @@ npx prisma migrate deploy
 npm run dev
 ```
 
-## The API will be running at http://localhost:5000.
+## The API will be running at : https://brandscrap.onrender.com/
 
 ## 📚 API Documentation
 
 Interactive API docs are available at:
-http://localhost:5000/docs
+https://brandscrap.onrender.com/docs
 
 ## 🛠️ Example Endpoints
 
