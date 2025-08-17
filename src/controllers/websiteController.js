@@ -19,6 +19,11 @@ export const analyzeWebsite = async (req, res) => {
       return res.status(400).json({ error: "URL is too long" });
     }
 
+    const existing=await prisma.website.findUnique({where:{url}});
+    if (existing){
+      return res.status(409).json({error:"Website already exist"});
+    }
+
     // Scrape brand + description
     const { brandName, description } = await scrapeWebsite(url);
 
@@ -72,6 +77,15 @@ export const updateWebsite = async (req, res) => {
   try {
     const { id } = req.params;
     const { brandName, description } = req.body;
+
+    if (
+      (brandName === undefined || brandName === null) &&
+      (description === undefined || description === null)
+    ) {
+      return res.status(400).json({
+        error: "At least one of brandName or description must be provided",
+      });
+    }
 
     const updated = await prisma.website.update({
       where: { id: Number(id) },

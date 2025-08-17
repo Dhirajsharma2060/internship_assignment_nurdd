@@ -9,6 +9,8 @@ const scrapeWebsite = async (url) => {
       timeout: 10000, // 10s timeout
     });
 
+    // request contain a content-type if it include the test/html then only furture to load the reponse
+
     if (!response.headers["content-type"].includes("text/html")) {
       throw new Error("Not an HTML page");
     }
