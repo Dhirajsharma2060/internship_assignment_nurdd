@@ -1,0 +1,32 @@
+{
+  "name": "internship_assignment_nurdd",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/Dhirajsharma2060/internship_assignment_nurdd#readme",
+  "bugs": {
+    "url": "https://github.com/Dhirajsharma2060/internship_assignment_nurdd/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dhirajsharma2060/internship_assignment_nurdd.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon src/index.js"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.14.0",
+    "axios": "^1.11.0",
+    "cheerio": "^1.1.2",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "nodemon": "^3.1.10",
+    "prisma": "^6.14.0",
+    "swagger-ui-express": "^5.0.1"
+  }
+}

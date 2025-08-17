@@ -1,0 +1,21 @@
+# Node modules
+node_modules/
+
+# Environment variables
+.env
+src/.env
+
+# Prisma generated client
+src/generated/prisma/
+
+# Prisma migrations lock file
+prisma/migrations/migration_lock.toml
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
