@@ -27,8 +27,18 @@ const scrapeWebsite = async (url) => {
     // Extract description
     let description =
       $('meta[name="description"]').attr("content") ||
-      $('meta[property="og:description"]').attr("content") ||
-      $("p").first().text();
+      $('meta[property="og:description"]').attr("content");
+
+    // If no meta description, find the first non-empty <p>
+    if (!description) {
+      $("p").each((_, el) => {
+        const text = $(el).text().trim();
+        if (text) {
+          description = text;
+          return false; // break loop
+        }
+      });
+    }
 
     if (!description) {
       description = "No description available";
