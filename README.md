@@ -78,13 +78,6 @@ Content-Type: application/json
 GET /api/websites?page=1&limit=10
 ```
 
-- Get All Websites (Paginated)
-
-```sh
-GET /api/websites?page=1&limit=10
-```
-
-
 - Update a Website
 
 ```sh
