@@ -12,7 +12,7 @@ dotenv.config();
 
 const app = express();
 
-// Trust proxy headers (important for correct IP detection behind proxies like Render, Heroku, etc.)
+// Trust proxy headers this is important for rate limiting in production
 app.set('trust proxy', true);
 
 
