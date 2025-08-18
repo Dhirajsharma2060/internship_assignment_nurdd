@@ -1,5 +1,4 @@
 import express from "express";
-import rateLimit from "express-rate-limit";
 import {
   analyzeWebsite,
   getWebsites,
@@ -8,17 +7,8 @@ import {
 } from "../controllers/websiteController.js";
 
 const router = express.Router();
-const analyzeLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 10,
-  message: { error: "Too many analyze requests, please try again later." },
-});
 
-const docsLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 1000,
-  message: { error: "Too many docs requests, please try again later." },
-});
+
 
 /**
  * @swagger
@@ -77,7 +67,7 @@ const docsLimiter = rateLimit({
  *                   type: string
  *                   example: "Something went wrong. Please try again later."
  */
-router.post("/analyze",analyzeLimiter,analyzeWebsite);
+router.post("/analyze",analyzeWebsite);
 
 /**
  * @swagger
