@@ -171,11 +171,10 @@ router.get("/", getWebsites);
  *               brandName:
  *                 type: string
  *                 description: The new brand name.
- *                 example: "Updated Brand"
  *               description:
  *                 type: string
  *                 description: The new description.
- *                 example: "Updated website description."
+ *           example: {}
  *     responses:
  *       200:
  *         description: Website updated successfully.

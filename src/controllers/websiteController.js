@@ -96,6 +96,25 @@ export const updateWebsite = async (req, res) => {
       });
     }
 
+    // Fetch current record
+    const existing = await prisma.website.findUnique({
+      where: { id: Number(id) },
+    });
+
+    if (!existing) {
+      return res.status(404).json({ error: "Website not found." });
+    }
+
+    // Check if the update would actually change anything
+    if (
+      (brandName === undefined || brandName === existing.brandName) &&
+      (description === undefined || description === existing.description)
+    ) {
+      return res.status(400).json({
+        error: "No changes detected. At least one field must be different from the current value.",
+      });
+    }
+
     const updated = await prisma.website.update({
       where: { id: Number(id) },
       data: { brandName, description },
