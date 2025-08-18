@@ -74,27 +74,11 @@ router.post("/analyze",analyzeWebsite);
  * /api/websites:
  *   get:
  *     summary: Get all stored websites
- *     description: Retrieve a paginated list of all websites that have been analyzed and stored in the database.
+ *     description: Retrieve a list of all websites that have been analyzed and stored in the database.
  *     tags: [Websites]
- *     parameters:
- *       - in: query
- *         name: page
- *         schema:
- *           type: integer
- *           minimum: 1
- *           default: 1
- *         description: Page number for pagination (optional)
- *       - in: query
- *         name: limit
- *         schema:
- *           type: integer
- *           minimum: 1
- *           maximum: 100
- *           default: 10
- *         description: Number of records per page (optional)
  *     responses:
  *       200:
- *         description: Paginated list of websites
+ *         description: List of websites
  *         content:
  *           application/json:
  *             schema:
@@ -121,18 +105,6 @@ router.post("/analyze",analyzeWebsite);
  *                         type: string
  *                         format: date-time
  *                         example: "2024-08-17T11:45:05.245Z"
- *                 page:
- *                   type: integer
- *                   example: 1
- *                 limit:
- *                   type: integer
- *                   example: 10
- *                 total:
- *                   type: integer
- *                   example: 50
- *                 totalPages:
- *                   type: integer
- *                   example: 5
  *       500:
  *         description: Server error.
  *         content:

@@ -52,29 +52,11 @@ export const analyzeWebsite = async (req, res) => {
 // GET /api/websites
 export const getWebsites = async (req, res) => {
   try {
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
-    const skip = (page - 1) * limit;
-
-    // SELECT operation with limit 
-    const [websites, total] = await Promise.all([
-      prisma.website.findMany({
-        orderBy: { createdAt: "desc" },
-        skip,
-        take: limit,
-      }),
-      // SELECT COUNT(*)
-      prisma.website.count(),
-    ]);
-
-    res.json({
-      data: websites,
-      page,
-      limit,
-      // using the count 
-      total,
-      totalPages: Math.ceil(total / limit),
+    const websites = await prisma.website.findMany({
+      orderBy: { createdAt: "desc" },
     });
+
+    res.json({ data: websites });
   } catch (error) {
     console.error("Get websites error:", error);
     res.status(500).json({ error: "Something went wrong. Please try again later." });
