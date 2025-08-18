@@ -6,22 +6,28 @@ import websiteRoutes from "./routes/routes.js";
 import prisma from "./models/db.js";
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./config/swagger.js";
-import docsLimiter from "./routes/routes.js"
 
 dotenv.config();
 
 const app = express();
 
 // Trust proxy headers this is important for rate limiting in production
-app.set('trust proxy', true);
-
+if (process.env.NODE_ENV === "production") {
+  app.set('trust proxy', true);
+}
 
 app.use(cors());
 app.use(express.json());
 
+const docsLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 1000,
+  message: { error: "Too many docs requests, please try again later." },
+});
+
 // Routes
 app.use("/api/websites", websiteRoutes);
-app.use("/docs", docsLimiter,swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use("/docs", docsLimiter, swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Health check
 app.get("/", (req, res) => {

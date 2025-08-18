@@ -27,13 +27,22 @@ export const analyzeWebsite = async (req, res) => {
     // Scrape brand + description
     const { brandName, description } = await scrapeWebsite(url);
 
+    // Avoid storing fallback data
+    if (
+      brandName === "Unknown" &&
+      description === "Could not fetch description"
+    ) {
+      return res.status(400).json({
+        error: "Website could not be scraped or is inaccessible.",
+      });
+    }
+
     // Save to DB
-    // INSERT operation in DB
     const website = await prisma.website.create({
       data: { url, brandName, description },
     });
 
-    res.status(201).json({id:website.id,brandName:website.brandName});
+    res.status(201).json({ id: website.id, brandName: website.brandName });
   } catch (error) {
     console.error("Analyze error:", error); // Log full error
     res.status(500).json({ error: "Something went wrong. Please try again later." });
