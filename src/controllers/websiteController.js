@@ -85,39 +85,43 @@ export const getWebsites = async (req, res) => {
 export const updateWebsite = async (req, res) => {
   try {
     const { id } = req.params;
-    const { brandName, description } = req.body;
+    let { brandName, description } = req.body;
 
-    if (
-      (brandName === undefined || brandName === null) &&
-      (description === undefined || description === null)
-    ) {
+    // Trim strings if provided
+    if (typeof brandName === "string") brandName = brandName.trim();
+    if (typeof description === "string") description = description.trim();
+
+    // Validate at least one field is provided
+    if (brandName === undefined && description === undefined) {
       return res.status(400).json({
         error: "At least one of brandName or description must be provided",
       });
     }
 
-    // Fetch current record
+    // Prevent empty strings
+    if (brandName !== undefined && brandName === "") {
+      return res.status(400).json({ error: "brandName cannot be empty" });
+    }
+    if (description !== undefined && description === "") {
+      return res.status(400).json({ error: "description cannot be empty" });
+    }
+
+    // Check if record exists
     const existing = await prisma.website.findUnique({
       where: { id: Number(id) },
     });
-
     if (!existing) {
       return res.status(404).json({ error: "Website not found." });
     }
 
-    // Check if the update would actually change anything
-    if (
-      (brandName === undefined || brandName === existing.brandName) &&
-      (description === undefined || description === existing.description)
-    ) {
-      return res.status(400).json({
-        error: "No changes detected. At least one field must be different from the current value.",
-      });
-    }
+    // Only include provided fields
+    const updateData = {};
+    if (brandName !== undefined) updateData.brandName = brandName;
+    if (description !== undefined) updateData.description = description;
 
     const updated = await prisma.website.update({
       where: { id: Number(id) },
-      data: { brandName, description },
+      data: updateData,
     });
 
     res.json(updated);
